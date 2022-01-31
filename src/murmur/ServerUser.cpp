@@ -31,6 +31,7 @@ ServerUser::ServerUser(Server *p, QSslSocket *socket)
 	iLastPermissionCheck = -1;
 
 	bOpus = false;
+	isBot = false;
 }
 
 

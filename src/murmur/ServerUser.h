@@ -124,6 +124,7 @@ public:
 
 	bool bVerified;
 	QStringList qslEmail;
+	bool isBot;
 
 	HostAddress haAddress;
 

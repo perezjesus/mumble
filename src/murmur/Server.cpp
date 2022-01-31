@@ -81,6 +81,7 @@ Server::Server(int snum, QObject *p) : QThread(p) {
 
 	bValid     = true;
 	iServerNum = snum;
+	numBots    = 0;
 #ifdef USE_ZEROCONF
 	zeroconf = nullptr;
 #endif
@@ -713,7 +714,7 @@ void Server::udpActivated(int socket) {
 	quint32 *ping = reinterpret_cast< quint32 * >(encrypt);
 	if ((len == 12) && (*ping == 0) && bAllowPing) {
 		ping[0] = uiVersionBlob;
-		ping[3] = qToBigEndian(static_cast< quint32 >(qhUsers.count()));
+		ping[3] = qToBigEndian(static_cast< quint32 >(qhUsers.count()-numBots));
 		ping[4] = qToBigEndian(static_cast< quint32 >(iMaxUsers));
 		ping[5] = qToBigEndian(static_cast< quint32 >(iMaxBandwidth));
 
@@ -868,7 +869,7 @@ void Server::run() {
 
 					ping[0] = uiVersionBlob;
 					// 1 and 2 will be the timestamp, which we return unmodified.
-					ping[3] = qToBigEndian(static_cast< quint32 >(qhUsers.count()));
+					ping[3] = qToBigEndian(static_cast< quint32 >(qhUsers.count()-numBots));
 					ping[4] = qToBigEndian(static_cast< quint32 >(iMaxUsers));
 					ping[5] = qToBigEndian(static_cast< quint32 >(iMaxBandwidth));
 

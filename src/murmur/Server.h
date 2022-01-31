@@ -110,6 +110,7 @@ public:
 	int iTimeout;
 	int iMaxBandwidth;
 	int iMaxUsers;
+	int numBots;
 	int iMaxUsersPerChannel;
 	int iDefaultChan;
 	bool bRememberChan;
