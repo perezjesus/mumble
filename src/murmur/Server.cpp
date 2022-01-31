@@ -378,6 +378,7 @@ void Server::readParams() {
 	qsRegLocation          = Meta::mp.qsRegLocation;
 	qurlRegWeb             = Meta::mp.qurlRegWeb;
 	bBonjour               = Meta::mp.bBonjour;
+	botCheck 			   = Meta::mp.botCheck; 
 	bAllowPing             = Meta::mp.bAllowPing;
 	allowRecording         = Meta::mp.allowRecording;
 	bCertRequired          = Meta::mp.bCertRequired;
@@ -394,6 +395,7 @@ void Server::readParams() {
 	iOpusThreshold         = Meta::mp.iOpusThreshold;
 	iChannelNestingLimit   = Meta::mp.iChannelNestingLimit;
 	iChannelCountLimit     = Meta::mp.iChannelCountLimit;
+
 
 	QString qsHost = getConf("host", QString()).toString();
 	if (!qsHost.isEmpty()) {
@@ -608,7 +610,12 @@ void Server::setLiveConf(const QString &key, const QString &value) {
 			removeZeroconf();
 		}
 #endif
-	} else if (key == "allowping")
+	} else if (key == "botCheck") {
+		MumbleProto::Authenticate mpa;
+		mpa.set_bot_check(true);
+		sendAll(mpa)
+	}
+	else if (key == "allowping")
 		bAllowPing = !v.isNull() ? QVariant(v).toBool() : Meta::mp.bAllowPing;
 	else if (key == "allowrecording")
 		allowRecording = !v.isNull() ? QVariant(v).toBool() : Meta::mp.allowRecording;
@@ -1647,6 +1654,8 @@ void Server::connectionClosed(QAbstractSocket::SocketError err, const QString &r
 		}
 
 		MumbleProto::UserRemove mpur;
+		if (u.isBot)
+			numBots--;
 		mpur.set_session(u->uiSession);
 		sendExcept(u, mpur);
 
@@ -1962,6 +1971,9 @@ void Server::userEnterChannel(User *p, Channel *c, MumbleProto::UserState &mpus)
 	sendClientPermission(static_cast< ServerUser * >(p), c);
 	if (c->cParent)
 		sendClientPermission(static_cast< ServerUser * >(p), c->cParent);
+
+	if (p.isBot)
+		numBots++;
 }
 
 bool Server::hasPermission(ServerUser *p, Channel *c, QFlags< ChanACL::Perm > perm) {

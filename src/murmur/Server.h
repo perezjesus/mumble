@@ -133,6 +133,7 @@ public:
 	bool bBonjour;
 	bool bAllowPing;
 	bool allowRecording;
+	bool botCheck;
 
 	QRegExp qrUserName;
 	QRegExp qrChannelName;

@@ -97,6 +97,7 @@ public:
 	QString qsRegLocation;
 	QUrl qurlRegWeb;
 	bool bBonjour;
+	bool botCheck;
 
 	QRegExp qrUserName;
 	QRegExp qrChannelName;

@@ -79,6 +79,7 @@ MetaParams::MetaParams() {
 	iObfuscate         = 0;
 	bSendVersion       = true;
 	bBonjour           = true;
+	botCheck           = false; 
 	bAllowPing         = true;
 	bCertRequired      = false;
 	bForceExternalAuth = false;
@@ -301,6 +302,7 @@ void MetaParams::read(QString fname) {
 	qsRegLocation = typeCheckedFromSettings("registerLocation", qsRegLocation);
 	qurlRegWeb    = QUrl(typeCheckedFromSettings("registerUrl", qurlRegWeb).toString());
 	bBonjour      = typeCheckedFromSettings("bonjour", bBonjour);
+	botCheck      = typeCheckedFromSettings("botCheck", botCheck);
 
 	iBanTries      = typeCheckedFromSettings("autobanAttempts", iBanTries);
 	iBanTimeframe  = typeCheckedFromSettings("autobanTimeframe", iBanTimeframe);
@@ -401,6 +403,7 @@ void MetaParams::read(QString fname) {
 	qmConfig.insert(QLatin1String("registerlocation"), qsRegLocation);
 	qmConfig.insert(QLatin1String("registerurl"), qurlRegWeb.toString());
 	qmConfig.insert(QLatin1String("bonjour"), bBonjour ? QLatin1String("true") : QLatin1String("false"));
+	qmConfig.insert(QLatin1String("botCheck"), botCheck ? QLatin1String("true") : QLatin1String("false"));
 	qmConfig.insert(QLatin1String("certificate"), QString::fromUtf8(qscCert.toPem()));
 	qmConfig.insert(QLatin1String("key"), QString::fromUtf8(qskKey.toPem()));
 	qmConfig.insert(QLatin1String("obfuscate"), bObfuscate ? QLatin1String("true") : QLatin1String("false"));
